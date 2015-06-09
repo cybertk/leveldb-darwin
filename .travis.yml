@@ -1,3 +1,3 @@
 language: objective-c
 script:
-- pod spec lint leveldb.podspec
+- xcodebuild test -project leveldb.xcodeproj -scheme leveldb-ios-tests -sdk iphonesimulator
