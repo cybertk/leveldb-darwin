@@ -8,6 +8,7 @@ before_script:
 script:
 - xcodebuild test -project leveldb.xcodeproj -scheme leveldb -sdk iphonesimulator
 - carthage build --no-skip-current
+- pod spec lint leveldb.podspec --allow-warnings
 after_script:
 - delete_keychain
 before_deploy:
