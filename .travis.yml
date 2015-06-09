@@ -1,3 +1,4 @@
 language: objective-c
 script:
 - xcodebuild test -project leveldb.xcodeproj -scheme leveldb -sdk iphonesimulator
+- carthage build --no-skip-current
