@@ -46,9 +46,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9295C99F1B2591EA00C388EB"
-               BuildableName = "leveldbTests.xctest"
-               BlueprintName = "leveldbTests"
+               BlueprintIdentifier = "921682811B25C1A300561211"
+               BuildableName = "leveldb-ios-tests.xctest"
+               BlueprintName = "leveldb-ios-tests"
                ReferencedContainer = "container:leveldb.xcodeproj">
             </BuildableReference>
          </TestableReference>
