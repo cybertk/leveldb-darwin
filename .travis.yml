@@ -1,5 +1,6 @@
 language: objective-c
 install:
+- brew update
 - brew install carthage
 script:
 - xcodebuild test -project leveldb.xcodeproj -scheme leveldb -sdk iphonesimulator
