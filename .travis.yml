@@ -1,0 +1,3 @@
+language: objective-c
+script:
+- pod spec lint leveldb.podspec
