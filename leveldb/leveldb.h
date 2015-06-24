@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 The LevelDB Authors. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
+
 //! Project version number for leveldb.
 FOUNDATION_EXPORT double leveldbVersionNumber;
 
