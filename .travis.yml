@@ -10,3 +10,12 @@ script:
 - carthage build --no-skip-current
 after_script:
 - delete_keychain
+deploy:
+  provider: releases
+  api_key:
+    secure: lFS9HnwauMypWlXKbGP8f8GBJ/3Xtr6L+R6PpCBbgjiJRdqylJaVo1KVR6fsARJ/QS9KHWMi8TN7D0XmuDkAmXfOELCFkq3ZPl8397UKjY8ZIQLyLfzR9VMaXsw2exnZRjhrJEL8enyuLYXOJPH8DM0bFxu0EJkCd+BKorgn1USkSz8ZAkVyyViP3HVCBraLMZXWWEQn1rhGbxU0xarNvlJqFdgtT3Cyr35FjHctxnAYMHMqKIXYfyan//oWkZfhBlB8sDH4QvxWGgHaca65Qdu44IKDPmo4vfk7PAq/W0vA+kxEDmL3ZcjZibd5sklVp4adHZRdGvaB4KjYGqCi1gVYeXNyayoEvt9Xj5dW9KLuYmA83gklWKIdlMO49WquIua74NQSY9ruFMR9oOlvEKl8p9iV9fu+h1bGZRLw2QQrP7+VJb6gswn9Ck9jy0+tIzCvlMq/XH6nGInvQNkOvRvDrox2V6l7YKqZ5Gg3LgUVSGJAT+fmB48F3uUd3vhq/cyIowDZJh3eNd5/hOncW746j1paXdYGTeKf+IY2UHhLBPnm4BprfII2owaQv2yTDkLn9M4uRpIOE0QgK2XZiFUFA+kiuxZq8kYZ9FM2aXwW2qfItqH3yl7Bt3dZVFVT8jxPsu2nbLHL5SegPSzTo7n8ncV4cf8dLifFhthVz38=
+  file: leveldb.framework
+  skip_cleanup: true
+  on:
+    repo: cybertk/leveldb-darwin
+    tags: true
