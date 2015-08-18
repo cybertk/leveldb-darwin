@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+
+set -e
+
+say ()
+{
+    if [ "$SILENT" != 1 ];
+    then
+        if [ "$1" = "-n" ]
+        then
+            echo -n "$2"
+        else
+            echo "$1"
+        fi
+    fi
+}
+
+bootstrap_ci_env ()
+{
+    if [ "$CI_SERVER_NAME" = "GitLab CI" ];
+    then
+        say "GitLab CI detected."
+        GIT_BRANCH=$CI_BUILD_REF_NAME
+        GIT_COMMIT=$CI_BUILD_REF
+        VERSION=${GIT_TAG:1}
+        BUILD=$CI_BUILD_ID
+
+    elif [ "$CI" = "true" ] && [ "$CIRCLECI" = "true" ];
+    then
+        say "Circle CI detected."
+        # https://circleci.com/docs/environment-variables
+        GIT_BRANCH=$CIRCLE_BRANCH
+        GIT_COMMIT=$CIRCLE_SHA1
+        VERSION=${GIT_TAG:1}
+        BUILD=$CIRCLE_BUILD_NUM
+    fi
+
+    # Fallback to default values
+    GIT_COMMIT=${GIT_COMMIT:-$(git rev-parse --short HEAD)}
+    GIT_BRANCH=${GIT_BRANCH:-$(git rev-parse --abbrev-ref HEAD)}
+    GIT_TAG=${GIT_TAG:-$(git describe --GIT_TAGs --exact-match --match "v*" 2>/dev/null || echo "")}
+    GIT_DIRTY=${GIT_DIRTY:-$(test -n "$(git status --porcelain)" && echo true || echo false)}
+    GIT_LOG=${GIT_LOG:-$(git log -1 --pretty=format:%s)}
+    BUILD=${BUILD:-local}
+    VERSION=${VERSION:-0.0.0}
+
+    export GIT_COMMIT GIT_BRANCH GIT_TAG GIT_DIRTY GIT_LOG BUILD VERSION
+}
+
+build_default ()
+{
+    cert --import
+    mobileprovision --import
+
+    if [ -n "$GIT_TAG" ];
+    then
+        say "Preparing for Beta Release $GIT_TAG"
+
+        update_build_number "$BUILD"
+        update_version "$VERSION"
+
+        make release-beta
+
+    elif [ "$GIT_BRANCH" = "master" ];
+    then
+        say "Preparing for Alpha Release"
+
+        update_build_number "$BUILD"
+
+        make release-alpha
+
+    else
+        say "Preparing for Development Release"
+
+        make test
+    fi
+
+    cert --remove
+    mobileprovision --remove
+}
+
+main () {
+    SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+    PATH=$SCRIPT_DIR:$PATH
+    export SCRIPT_DIR PATH
+
+    bootstrap_ci_env
+
+    if [ "${BASH_SOURCE[0]}" != "${0}" ];
+    then
+        say "*** CI build environment bootstraped"
+    elif [ "$#" -gt 0 ];
+    then
+        say "*** Running $*"
+        "$@"
+    else
+        build_default
+    fi
+}
+
+main "$@"
