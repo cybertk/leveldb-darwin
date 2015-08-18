@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+update_build_number() {
+    local build=$1
+
+    if ! echo "$build" | grep -q -E '^[0-9]+$'
+    then
+        echo "error: Invalid build number specified"
+        exit 1
+    fi
+
+    xcrun agvtool new-version -all "$build"
+}
+
+update_build_number "$@"
